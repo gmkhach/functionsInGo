@@ -84,20 +84,47 @@ func main() {
 	checkType(sa1)
 	checkType(sa2)
 	checkType(p1)
+
+	// Anonymous funcs
+	func() {
+		fmt.Println("This is an anonymous func")
+	}()
+
+	func(s string) {
+		fmt.Println(s)
+	}("Success!")
+
+	// func expressions
+	f1 := func(){
+		fmt.Println("This is a func expression")
+	}
+	f1()
+	
+	f2 := func(i int){
+		fmt.Println("The year the big brother started watching:", i)
+	}
+	f2(1984)
+
+	// returnsFunc is a func that returns a nother func, which in turn returns an int
+	fmt.Printf("%T\n", returnsFunc)
+	fmt.Printf("%T\n", returnsFunc())
+
+	// To get the int we need to execute the func that is returned by executing returnsFunc
+	fmt.Println(returnsFunc()())
 }
 
 // func (r receiver) indentifier(parameters) return(s) { ... }
 func foo() {
-	fmt.Println("hello from foo")
+	fmt.Println("Hello from foo")
 }
 
 // Everything in Go is passed by value
 func bar(s string) {
-	fmt.Println("hello,", s)
+	fmt.Println("Hello,", s)
 }
 
 func woo(s string) string {
-	return fmt.Sprint("hello from woo, ", s)
+	return fmt.Sprint("Hello from woo, ", s)
 }
 
 func mouse(fn, ln string) (string, bool) {
@@ -119,12 +146,12 @@ func sum(x ...int) int {
 }
 
 func testDefer() {
-	fmt.Println("should execute last")
+	fmt.Println("This should execute last")
 }
 
 // Methods are funcs that can be attached to any type by the use of receivers
 func (p person) speak() {
-	fmt.Println("hello, I'm", p.first, p.last)
+	fmt.Println("Hello, I'm", p.first, p.last)
 }
 
 func checkType(h human) {
@@ -133,5 +160,12 @@ func checkType(h human) {
 			fmt.Println("I am of type person, but I'm of also of type human.", h.(person).first)
 		case secretAgent:
 			fmt.Println("I am of type secretAgent, but I'm also of type human.", h.(secretAgent).ltk)
+	}
+}
+
+// This func returns a func that returns an int
+func returnsFunc() func() int {
+	return  func() int {
+		return 1984
 	}
 }
