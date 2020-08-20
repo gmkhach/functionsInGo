@@ -13,6 +13,17 @@ type secretAgent struct{
 	ltk		bool
 }
 
+// Interfaces allow us to define behavior and implement polymorphism
+// Any other type that has the method speak() is also of type human
+// A value can be of more than one type
+type human interface {
+	speak()
+}
+
+// This is an empty interface
+// It does not have any methods, therefore every type automatically implements this interface
+type emptyInterface interface {}
+
 func main() {
 	// identifier(arguments)
 	foo()
@@ -59,6 +70,20 @@ func main() {
 	}
 	sa1.speak()
 	sa2.speak()
+
+	p1 := person{
+		first: "Dr",
+		last: "No",
+		age: 42,
+	}
+
+	p1.speak()
+	fmt.Printf("%T\n", sa1)
+	fmt.Printf("%T\n", p1)
+
+	checkType(sa1)
+	checkType(sa2)
+	checkType(p1)
 }
 
 // func (r receiver) indentifier(parameters) return(s) { ... }
@@ -97,7 +122,16 @@ func testDefer() {
 	fmt.Println("should execute last")
 }
 
-// Methods are funcs that can be attacked to any type by the use of receivers
-func (s secretAgent) speak() {
-	fmt.Println("hello, I'm", s.last, ",", s.first, s.last)
+// Methods are funcs that can be attached to any type by the use of receivers
+func (p person) speak() {
+	fmt.Println("hello, I'm", p.first, p.last)
+}
+
+func checkType(h human) {
+	switch h.(type) {
+		case person:
+			fmt.Println("I am of type person, but I'm of also of type human.", h.(person).first)
+		case secretAgent:
+			fmt.Println("I am of type secretAgent, but I'm also of type human.", h.(secretAgent).ltk)
+	}
 }
