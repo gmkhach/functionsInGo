@@ -105,12 +105,26 @@ func main() {
 	}
 	f2(1984)
 
-	// returnsFunc is a func that returns a nother func, which in turn returns an int
+	// returnsFunc is a func that returns another func, which in turn returns an int
 	fmt.Printf("%T\n", returnsFunc)
 	fmt.Printf("%T\n", returnsFunc())
 
 	// To get the int we need to execute the func that is returned by executing returnsFunc
 	fmt.Println(returnsFunc()())
+
+	// A callback example
+	ii := []int{ 10, 11, 12, 13, 14, 15, 16, 17, 18, 19 }
+	evenTotal := evenSum(sum, ii...)	
+	fmt.Println(evenTotal)
+
+	// An example of closure
+	closure := incrementor()
+	fmt.Printf("closure, 1st run: %v\n", closure())
+	fmt.Printf("closure, 2nd run: %v\n", closure())
+
+	// Using recursion
+	fmt.Printf("4!: %v\n", factorial(4))
+
 }
 
 // func (r receiver) indentifier(parameters) return(s) { ... }
@@ -168,4 +182,32 @@ func returnsFunc() func() int {
 	return  func() int {
 		return 1984
 	}
+}
+
+// A callback function is a func that is passed to another function as an argument
+func evenSum(callback func(xi ...int) int, xi ...int) int {
+	var ii []int
+	for _, v := range xi {
+		if v % 2 == 0 {
+			ii = append(ii, v)
+		}
+	}
+	return callback(ii...)
+}
+
+// Closures are functions that have access to their parent scope
+func incrementor() func() int {
+	var x int
+	return func() int {
+		x++
+		return x
+	}
+}
+
+// Recursion is a function that calls itself
+func factorial(n int) int {
+	if n == 1 {
+		return 1
+	}
+	return n * factorial(n - 1)
 }
